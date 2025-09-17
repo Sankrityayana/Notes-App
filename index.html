@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  <script src="/config.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-content">
+        <h1 class="logo">Notes</h1>
+        <nav class="nav" aria-label="User">
+          <div id="auth-info" class="auth-info" hidden>
+            <img id="avatar" class="avatar" alt="User avatar" hidden />
+            <span id="current-username" class="username" aria-live="polite"></span>
+            <button id="logout-btn" class="btn btn-ghost" type="button">Logout</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Auth View (Google Sign-In) -->
+      <section id="auth-section" class="card auth" aria-labelledby="auth-title">
+        <h2 id="auth-title">Welcome</h2>
+        <p class="muted">Use your Google account. First-time sign in will create your space.</p>
+        <div class="gsi-row">
+          <div class="gsi-box">
+            <div class="muted small">New here?</div>
+            <div id="gsi-signup" class="gsi-container"></div>
+          </div>
+          <div class="gsi-box">
+            <div class="muted small">Returning?</div>
+            <div id="gsi-signin" class="gsi-container"></div>
+          </div>
+        </div>
+        <p id="auth-error" class="error" role="alert" aria-live="assertive"></p>
+      </section>
+
+      <!-- Notes App -->
+      <section id="notes-section" class="notes" hidden aria-label="Notes">
+        <div class="notes-header">
+          <div class="search-wrap">
+            <input id="search-input" class="search" type="search" placeholder="Search notes..." aria-label="Search notes" />
+          </div>
+          <button id="new-note-btn" class="btn" type="button">➕ New Note</button>
+        </div>
+
+        <!-- New/Edit Note Form (inline) -->
+        <section id="editor" class="card editor hidden" aria-label="Note editor">
+          <form id="note-form">
+            <input type="hidden" id="note-id" />
+            <div class="field">
+              <label for="note-title">Title</label>
+              <input id="note-title" type="text" required maxlength="120" placeholder="Note title" />
+            </div>
+            <div class="field">
+              <label for="note-content">Content</label>
+              <textarea id="note-content" rows="6" required placeholder="Write your note..."></textarea>
+            </div>
+            <div class="editor-actions">
+              <button class="btn" type="submit">Save</button>
+              <button id="cancel-edit" class="btn btn-secondary" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Notes List -->
+        <section class="grid" id="notes-list" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <footer class="container muted small center">Local demo — data stored in your browser</footer>
+
+    <template id="note-card-template">
+      <article class="card note" data-id="">
+        <header class="note-header">
+          <h3 class="note-title"></h3>
+          <time class="note-time" datetime=""></time>
+        </header>
+        <p class="note-content"></p>
+        <div class="note-actions">
+          <button class="btn btn-ghost btn-small edit" type="button">✏️ Edit</button>
+          <button class="btn btn-ghost btn-small danger delete" type="button">🗑 Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+  </html>
