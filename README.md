@@ -1,72 +1,98 @@
-Notes App (Vanilla JS)
-======================
+Notes App (Vanilla JS + Google Sign-In)
+=======================================
 
-Private, user-specific notes with Google Sign-Up/Sign-In using only HTML, CSS, and JavaScript. Notes are stored per user in your browser's IndexedDB (demo only). The Google Client ID is provided at runtime by a config endpoint (`/api/config.js`) so it's never hard-coded.
+A minimal, professional Notes app with Google Sign-Up/Sign-In. Each user’s notes are private (scoped to their Google Account ID) and stored locally in IndexedDB. No frameworks or backend database required. The Google OAuth Client ID is injected at runtime from environment variables via a lightweight config endpoint (`/api/config.js`) so it is never hard-coded in client code.
 
-Features
---------
-- Google Sign-Up/Sign-In (OAuth 2.0)
-- Per-user session stored in `sessionStorage`
-- Per-user private notes (CRUD): create, list, edit, delete
-- Clean, minimal, responsive UI; smooth transitions
-- No frameworks, one HTML + separate CSS/JS
+Highlights
+----------
+- Google OAuth 2.0: Sign Up and Sign In (two-button UX)
+- Private per-user notes with IndexedDB (CRUD: create, list, edit, delete)
+- Professional & Calm theme (light blue background, white cards, blue primary buttons)
+- Smooth animations, responsive layout, clean accessibility-minded UI
+- No frameworks; single HTML + separate CSS/JS
+- Secure config delivery at runtime (`/api/config.js`), works on Vercel and locally via Vercel CLI
+
+Tech Stack
+----------
+- Frontend: HTML, CSS, JavaScript (no frameworks)
+- Auth: Google Identity Services (client-side OAuth 2.0)
+- Storage: IndexedDB (per userId)
+- Config: Serverless function returning `window.APP_CONFIG` from env vars
+
+Architecture Overview
+---------------------
+1. On load, the app fetches `/api/config.js` which sets `window.APP_CONFIG.GOOGLE_CLIENT_ID` from environment variables.
+2. Google Identity Services renders two buttons (Sign Up / Sign In).
+3. After login, the app decodes the ID token to get the Google user ID (`sub`) and stores a session in `sessionStorage`.
+4. Notes are fetched from IndexedDB filtered by `userId`. First-time users get a seeded welcome note.
+5. Create/Edit/Delete operations update IndexedDB and the UI re-renders with animations.
 
 Project Structure
 -----------------
-- `index.html` – semantic layout for auth and notes UI
-- `styles.css` – responsive styles and micro-interactions
-- `app.js` – Google auth, notes CRUD, and IndexedDB persistence
-- `.env.example` – template for secrets; copy to `.env` and fill
+- `index.html` – semantic layout for auth and notes UI (includes `/api/config.js` and Google GSI script)
+- `styles.css` – Professional & Calm theme, responsive layout, transitions
+- `app.js` – Google auth flow, session, and per-user notes CRUD via IndexedDB
+- `api/config.js` – serverless function: exposes `GOOGLE_CLIENT_ID` as `window.APP_CONFIG`
+- `.env.example` – template for local development (used by `vercel dev`)
 
-Local Dev (Vercel CLI)
-----------------------
-Use the Vercel Dev server to emulate serverless functions locally.
+Local Development (Vercel CLI)
+------------------------------
+Use Vercel Dev to emulate serverless functions locally so `/api/config.js` works the same as production.
 
-1) Install Vercel CLI (one-time):
+1) Install Vercel CLI:
 ```powershell
 npm i -g vercel
 ```
-2) Create `.env` from the example and fill in your client ID:
+2) Create `.env` from the example and fill in your Client ID:
 ```powershell
 copy .env.example .env
 ```
-3) Run locally with env support:
+3) Run locally:
 ```powershell
 vercel dev
 ```
-4) Open the provided localhost URL; `/api/config.js` will serve your `GOOGLE_CLIENT_ID`.
+4) Open the provided localhost URL. Confirm `GET /api/config.js` returns a JS snippet with your `GOOGLE_CLIENT_ID`.
 
 Deploy to Vercel
 ----------------
-1) Push this repo to GitHub.
-2) In Vercel, import the project and set Environment Variables:
+1) Push this repo to GitHub (or connect directly from Vercel).
+2) In Vercel → Project → Settings → Environment Variables, add:
 	 - `GOOGLE_CLIENT_ID=YOUR_CLIENT_ID.apps.googleusercontent.com`
-3) Deploy. The front-end loads `/api/config.js`, which returns `window.APP_CONFIG` with `GOOGLE_CLIENT_ID` from `process.env`.
-4) Add your production domain to Google Cloud Console → Authorized JavaScript origins.
+3) Deploy. The client loads `/api/config.js`, which injects `window.APP_CONFIG` at runtime.
+4) In Google Cloud Console → OAuth 2.0 Client, add your Vercel domain to Authorized JavaScript origins.
 
-Sign Up vs Sign In
-------------------
-- The landing screen shows two Google buttons: “Sign up with Google” and “Sign in with Google”.
-- First-time sign in for an account is treated as Sign Up and automatically creates a welcome note in your private space.
+Usage
+-----
+1) Landing shows:
+	 - “Sign up with Google” (for new users) – first login seeds a welcome note
+	 - “Sign in with Google” (for returning users)
+2) Create notes via “➕ New Note”. Edit inline; delete with confirmation. Search filters notes by title/content.
+3) Logout from the header; notes are hidden until you sign in again.
 
-Google OAuth Setup
-------------------
-1. Go to Google Cloud Console → APIs & Services → Credentials.
-2. Create Credentials → OAuth client ID → Application type: Web application.
-3. Authorized JavaScript origins: add your Vercel domain, and the localhost URL used by `vercel dev`.
-4. Note the Client ID and set it in your environment variables (`.env` locally, Vercel env in production). No changes are needed in `app.js`.
+Theme (Professional & Calm)
+---------------------------
+- Background: `#E8F0FE`
+- Card/Note: `#FFFFFF`
+- Primary Buttons: `#1A73E8`
+- Secondary Buttons: `#5F6368`
+- Text: `#202124`
+
+Troubleshooting
+---------------
+- Google Sign-In not showing or fails:
+	- Ensure `GOOGLE_CLIENT_ID` is set in Vercel env (and `.env` for `vercel dev`).
+	- Check that your domain/localhost URL is in Google Cloud Console → Authorized JavaScript origins.
+	- Open the browser console and visit `/api/config.js` to verify the config is being injected.
+- Notes don’t persist:
+	- IndexedDB can be blocked by private windows or strict settings; try a normal window.
+	- Check the Application tab (DevTools) → IndexedDB → `notesApp` → `notes`.
 
 Security Notes
 --------------
-- This is a demo. Notes are stored locally in IndexedDB and tied to the Google account ID in the browser.
-- No backend is used; do not store sensitive data.
-
-Storage
--------
-- `IndexedDB` database `notesApp`, store `notes` with fields `{ id, userId, title, content, createdAt, updatedAt }`.
-- Session stored in `sessionStorage` under `notes.session.google`.
+- Demo-only: Notes live in the browser (IndexedDB) and are scoped by Google user ID.
+- No backend database is used. Do not store sensitive data.
+- The Google OAuth client ID is delivered at runtime from environment variables—never hard-coded in client bundles.
 
 License
 -------
 MIT
-# Notes-App
