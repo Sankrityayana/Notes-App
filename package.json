@@ -1,13 +1,9 @@
 {
   "name": "notes-app",
-  "version": "1.0.0",
   "private": true,
+  "version": "1.0.0",
   "description": "Notes App with Google Sign-In and IndexedDB",
   "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "dev": "vercel dev"
   }
 }

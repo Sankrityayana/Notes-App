@@ -1,6 +1,6 @@
 // Notes App - Google Sign-In + IndexedDB (demo)
 
-// CONFIG: Loaded from /config.js via Node server (.env -> GOOGLE_CLIENT_ID)
+// CONFIG: Loaded from /api/config.js (serverless) which injects window.APP_CONFIG from env
 const GOOGLE_CLIENT_ID = (window.APP_CONFIG && window.APP_CONFIG.GOOGLE_CLIENT_ID) || '';
 const SESSION_KEY = 'notes.session.google'; // sessionStorage
 
@@ -147,7 +147,7 @@ function onAuthChanged() {
 
 function setupGoogleSignIn() {
   if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('REPLACE_')) {
-    authError.textContent = 'Missing Google CLIENT_ID. Please set GOOGLE_CLIENT_ID in app.js.';
+    authError.textContent = 'Missing Google CLIENT_ID. Ensure /api/config.js returns window.APP_CONFIG with GOOGLE_CLIENT_ID set (via environment variables).';
     return;
   }
   /* global google */

@@ -1,7 +1,7 @@
 Notes App (Vanilla JS)
 ======================
 
-Private, user-specific notes with Google Sign-Up/Sign-In using only HTML, CSS, and JavaScript. Notes are stored per user in your browser's IndexedDB (demo only). A tiny Node server loads your Google Client ID from a `.env` file to avoid hard-coding keys.
+Private, user-specific notes with Google Sign-Up/Sign-In using only HTML, CSS, and JavaScript. Notes are stored per user in your browser's IndexedDB (demo only). The Google Client ID is provided at runtime by a config endpoint (`/api/config.js`) so it's never hard-coded.
 
 Features
 --------
@@ -16,31 +16,25 @@ Project Structure
 - `index.html` – semantic layout for auth and notes UI
 - `styles.css` – responsive styles and micro-interactions
 - `app.js` – Google auth, notes CRUD, and IndexedDB persistence
-- `server.js` – Node.js static server that exposes `/config.js` from `.env`
 - `.env.example` – template for secrets; copy to `.env` and fill
 
-Run Locally
------------
-Local Setup
------------
-1) Create a Google OAuth Client ID (Web) in Google Cloud Console.
-	- Authorized JavaScript origins: `http://localhost:8080`
-	- Copy the Client ID.
-2) Create `.env` from the example:
-	```
-	copy .env.example .env
-	```
-	Then edit `.env` and set:
-	```
-	GOOGLE_CLIENT_ID=YOUR_CLIENT_ID.apps.googleusercontent.com
-	PORT=8080
-	```
-3) Install and run the server:
-	```powershell
-	npm install
-	npm start
-	```
-4) Open `http://localhost:8080` in your browser.
+Local Dev (Vercel CLI)
+----------------------
+Use the Vercel Dev server to emulate serverless functions locally.
+
+1) Install Vercel CLI (one-time):
+```powershell
+npm i -g vercel
+```
+2) Create `.env` from the example and fill in your client ID:
+```powershell
+copy .env.example .env
+```
+3) Run locally with env support:
+```powershell
+vercel dev
+```
+4) Open the provided localhost URL; `/api/config.js` will serve your `GOOGLE_CLIENT_ID`.
 
 Deploy to Vercel
 ----------------
@@ -59,18 +53,13 @@ Google OAuth Setup
 ------------------
 1. Go to Google Cloud Console → APIs & Services → Credentials.
 2. Create Credentials → OAuth client ID → Application type: Web application.
-3. Authorized JavaScript origins: add `http://localhost:8080` (and/or your host).
-4. Note the Client ID and set it in `app.js` by replacing `GOOGLE_CLIENT_ID`.
+3. Authorized JavaScript origins: add your Vercel domain, and the localhost URL used by `vercel dev`.
+4. Note the Client ID and set it in your environment variables (`.env` locally, Vercel env in production). No changes are needed in `app.js`.
 
 Security Notes
 --------------
 - This is a demo. Notes are stored locally in IndexedDB and tied to the Google account ID in the browser.
 - No backend is used; do not store sensitive data.
-
-Security Notes
---------------
-- This is a demo. Do not use `localStorage` for real credentials.
-- Passwords are salted and hashed client-side with SHA-256 to avoid plain text, but this is not a substitute for a backend.
 
 Storage
 -------
