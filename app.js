@@ -104,8 +104,7 @@ const authInfo = $('#auth-info');
 const currentUsernameEl = $('#current-username');
 const avatarEl = $('#avatar');
 const logoutBtn = $('#logout-btn');
-const gsiSignup = $('#gsi-signup');
-const gsiSignin = $('#gsi-signin');
+const gsiButton = $('#gsi-button');
 const authError = $('#auth-error');
 
 // Notes UI
@@ -172,17 +171,8 @@ function setupGoogleSignIn() {
     auto_select: true,
     ux_mode: 'popup'
   });
-  if (gsiSignup) {
-    google.accounts.id.renderButton(gsiSignup, {
-      type: 'standard',
-      theme: 'outline',
-      size: 'large',
-      text: 'signup_with',
-      shape: 'pill'
-    });
-  }
-  if (gsiSignin) {
-    google.accounts.id.renderButton(gsiSignin, {
+  if (gsiButton) {
+    google.accounts.id.renderButton(gsiButton, {
       type: 'standard',
       theme: 'outline',
       size: 'large',

@@ -29,15 +29,10 @@
       <!-- Auth View (Google Sign-In) -->
       <section id="auth-section" class="card auth" aria-labelledby="auth-title">
         <h2 id="auth-title">Welcome</h2>
-        <p class="muted">Use your Google account. First-time sign in will create your space.</p>
-        <div class="gsi-row">
-          <div class="gsi-box">
-            <div class="muted small">New here?</div>
-            <div id="gsi-signup" class="gsi-container"></div>
-          </div>
-          <div class="gsi-box">
-            <div class="muted small">Returning?</div>
-            <div id="gsi-signin" class="gsi-container"></div>
+        <p class="muted">Sign in with your Google account. First-time sign in will create your space.</p>
+        <div class="gsi-row single">
+          <div class="gsi-box full">
+            <div id="gsi-button" class="gsi-container" aria-label="Sign in with Google"></div>
           </div>
         </div>
         <p id="auth-error" class="error" role="alert" aria-live="assertive"></p>

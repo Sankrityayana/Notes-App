@@ -1,11 +1,11 @@
 Notes App (Vanilla JS + Google Sign-In)
 =======================================
 
-A minimal, professional Notes app with Google Sign-Up/Sign-In. Each user’s notes are private (scoped to their Google Account ID) and stored locally in IndexedDB. No frameworks or backend database required. The Google OAuth Client ID is injected at runtime from environment variables via a lightweight config endpoint (`/api/config.js`) so it is never hard-coded in client code.
+A minimal, professional Notes app with Google Sign-In. Each user’s notes are private (scoped to their Google Account ID) and stored locally in IndexedDB. No frameworks or backend database required. The Google OAuth Client ID is injected at runtime from environment variables via a lightweight config endpoint (`/api/config.js`) so it is never hard-coded in client code.
 
 Highlights
 ----------
-- Google OAuth 2.0: Sign Up and Sign In (two-button UX)
+- Google OAuth 2.0: Single “Sign in with Google” flow
 - Private per-user notes with IndexedDB (CRUD: create, list, edit, delete)
 - Professional & Calm theme (light blue background, white cards, blue primary buttons)
 - Smooth animations, responsive layout, clean accessibility-minded UI
@@ -22,7 +22,7 @@ Tech Stack
 Architecture Overview
 ---------------------
 1. On load, the app fetches `/api/config.js` which sets `window.APP_CONFIG.GOOGLE_CLIENT_ID` from environment variables.
-2. Google Identity Services renders two buttons (Sign Up / Sign In).
+2. Google Identity Services renders a single “Sign in with Google” button.
 3. After login, the app decodes the ID token to get the Google user ID (`sub`) and stores a session in `sessionStorage`.
 4. Notes are fetched from IndexedDB filtered by `userId`. First-time users get a seeded welcome note.
 5. Create/Edit/Delete operations update IndexedDB and the UI re-renders with animations.
@@ -63,9 +63,8 @@ Deploy to Vercel
 
 Usage
 -----
-1) Landing shows:
-	 - “Sign up with Google” (for new users) – first login seeds a welcome note
-	 - “Sign in with Google” (for returning users)
+1) Landing shows a single “Sign in with Google” button.
+	- First-time sign-in seeds a welcome note automatically
 2) Create notes via “➕ New Note”. Edit inline; delete with confirmation. Search filters notes by title/content.
 3) Logout from the header; notes are hidden until you sign in again.
 
