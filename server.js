@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 8080;
 
 const ROOT = __dirname;
 
-// Serve config as JS to the client
-app.get('/config.js', (req, res) => {
+// Serve config as JS to the client (local parity with Vercel /api/config.js)
+app.get(['/config.js','/api/config.js'], (req, res) => {
   const cfg = {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   };

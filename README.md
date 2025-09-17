@@ -21,8 +21,8 @@ Project Structure
 
 Run Locally
 -----------
-Setup
------
+Local Setup
+-----------
 1) Create a Google OAuth Client ID (Web) in Google Cloud Console.
 	- Authorized JavaScript origins: `http://localhost:8080`
 	- Copy the Client ID.
@@ -41,6 +41,14 @@ Setup
 	npm start
 	```
 4) Open `http://localhost:8080` in your browser.
+
+Deploy to Vercel
+----------------
+1) Push this repo to GitHub.
+2) In Vercel, import the project and set Environment Variables:
+	 - `GOOGLE_CLIENT_ID=YOUR_CLIENT_ID.apps.googleusercontent.com`
+3) Deploy. The front-end loads `/api/config.js`, which returns `window.APP_CONFIG` with `GOOGLE_CLIENT_ID` from `process.env`.
+4) Add your production domain to Google Cloud Console → Authorized JavaScript origins.
 
 Sign Up vs Sign In
 ------------------
